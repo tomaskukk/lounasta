@@ -31,4 +31,4 @@ codesign -s "$CERT_NAME" --deep --force --verbose "$APP_BUNDLE"
 echo "Build process completed."
 
 # Run the app
-open "$APP_BUNDLE"
+./"$APP_EXECUTABLE"
