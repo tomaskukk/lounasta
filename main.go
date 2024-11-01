@@ -13,10 +13,10 @@ import (
 )
 
 /*
-#cgo CFLAGS: -x objective-c -mmacosx-version-min=10.15
+#cgo CFLAGS: -x objective-c -mmacosx-version-min=10.15 -I./location_manager
 #cgo LDFLAGS: -framework CoreLocation -framework Foundation -L. -llocation
 
-#import "location_manager_darwin.h"
+#import "location_manager/location_manager_darwin.h"
 */
 import "C"
 
