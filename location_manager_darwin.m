@@ -27,7 +27,7 @@
         // Check authorization status and request if not determined
         if (status == kCLAuthorizationStatusNotDetermined) {
             [manager requestAlwaysAuthorization]; // macOS generally uses always authorization
-            CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, false); // Wait for user response
+            CFRunLoopRun();
         } else if (status == kCLAuthorizationStatusAuthorized || status == kCLAuthorizationStatusAuthorizedAlways) {
             [manager requestLocation]; // Proceed if already authorized
         } else {
@@ -77,10 +77,12 @@
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
     if (status == kCLAuthorizationStatusAuthorized || status == kCLAuthorizationStatusAuthorizedAlways) {
         [manager requestLocation];
+        CFRunLoopStop(CFRunLoopGetCurrent());
     } else if (status == kCLAuthorizationStatusDenied || status == kCLAuthorizationStatusRestricted) {
         NSLog(@"Location authorization denied or restricted.");
         CFRunLoopStop(CFRunLoopGetCurrent());
     }
+
 }
 
 @end
