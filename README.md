@@ -4,6 +4,8 @@ Build the objective c targets:
 
 #### ARM
 
+Use the `./run.sh` script or:
+
 Create the object file & static library based on that
 
 ```bash
