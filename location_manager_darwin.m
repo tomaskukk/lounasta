@@ -26,7 +26,6 @@
         
         // Check authorization status and request if not determined
         if (status == kCLAuthorizationStatusNotDetermined) {
-            NSLog(@"Requesting location authorization");
             [manager requestAlwaysAuthorization]; // macOS generally uses always authorization
             CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, false); // Wait for user response
         } else if (status == kCLAuthorizationStatusAuthorized || status == kCLAuthorizationStatusAuthorizedAlways) {
@@ -76,7 +75,6 @@
 }
 
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
-    NSLog(@"Authorization status changed: %d", status);
     if (status == kCLAuthorizationStatusAuthorized || status == kCLAuthorizationStatusAuthorizedAlways) {
         [manager requestLocation];
     } else if (status == kCLAuthorizationStatusDenied || status == kCLAuthorizationStatusRestricted) {
@@ -88,7 +86,6 @@
 @end
 
 int get_current_location(Location *loc) {
-    NSLog(@"Entering get_current_location");
     if (![CLLocationManager locationServicesEnabled]) {
         NSLog(@"Location services disabled");
         return kCLErrorLocationUnknown;
