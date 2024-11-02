@@ -28,14 +28,15 @@ while getopts "c:v" opt; do
 done
 
 # Remove old build artifacts
-rm -rf $VERBOSE $CURRENT_DIR/$APP_NAME $CURRENT_DIR/location_manager/location_manager_darwin.o $CURRENT_DIR/liblocation.a
+rm -rf $VERBOSE $CURRENT_DIR/$APP_NAME $CURRENT_DIR/location_manager/location_manager_darwin.o $LOCATION_MANAGER_DIR/liblocation.a
 
 # Build the C library
 clang -c -arch arm64 -o $LOCATION_MANAGER_DIR/location_manager_darwin.o $LOCATION_MANAGER_DIR/location_manager_darwin.m
-ar rcs liblocation.a $LOCATION_MANAGER_DIR/location_manager_darwin.o
+
+ar rcs $LOCATION_MANAGER_DIR/liblocation.a $LOCATION_MANAGER_DIR/location_manager_darwin.o
 
 # Build the Go binary
-go build -gcflags "all=-N -l" -ldflags="-extldflags \"-sectcreate __TEXT __info_plist $INFO_PLIST\" -linkmode=external" -o $APP_NAME $VERBOSE -x "main.go"
+go build -gcflags "all=-N -l" -ldflags="-extldflags \"-L$LOCATION_MANAGER_DIR -sectcreate __TEXT __info_plist $INFO_PLIST\" -linkmode=external" -o $APP_NAME $VERBOSE -x "main.go"
 
 # Sign the exectuable
 if [ -n "$CERT_NAME" ]; then
