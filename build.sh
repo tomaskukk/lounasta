@@ -5,7 +5,7 @@ echo "Starting build process..."
 # Define variables
 APP_NAME="lounasta"
 CURRENT_DIR=$(pwd)
-LOCATION_MANAGER_DIR="$CURRENT_DIR/location_manager"
+LOCATION_MANAGER_DIR="$CURRENT_DIR/location/location_manager"
 EXECUTABLE_PATH="$CURRENT_DIR/$APP_NAME"
 INFO_PLIST="$LOCATION_MANAGER_DIR/Info.plist"
 CERT_NAME=""

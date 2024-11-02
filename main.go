@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"location-v2/api"
 	"location-v2/cli"
-	"location-v2/location_manager"
+	"location-v2/location/location_manager"
 
 	"os"
 	"strings"
