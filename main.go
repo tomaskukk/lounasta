@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"location-v2/api"
 	"location-v2/cli"
-	"location-v2/location/location_manager"
+	"location-v2/location"
+
 	"location-v2/utils"
 
 	"os"
@@ -13,7 +14,7 @@ import (
 )
 
 func run(name string, food string) {
-	loc, err := location_manager.CurrentLocation()
+	loc, err := location.GetLocation()
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return
@@ -21,8 +22,8 @@ func run(name string, food string) {
 
 	var restaurants []api.Restaurant
 
-	lat := loc.Coordinate.Latitude
-	lon := loc.Coordinate.Longitude
+	lat := loc.Latitude
+	lon := loc.Longitude
 
 	restaurants, err = api.FetchLounaat(lat, lon)
 

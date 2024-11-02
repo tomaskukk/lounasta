@@ -1,6 +1,6 @@
 #import <CoreLocation/CoreLocation.h>
 #import <Foundation/Foundation.h>
-#import "location_manager_darwin.h"
+#import "location_provider_darwin.h"
 
 @interface LocationManager : NSObject <CLLocationManagerDelegate>
 {
