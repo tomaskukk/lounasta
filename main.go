@@ -5,41 +5,12 @@ import (
 	"location-v2/api"
 	"location-v2/cli"
 	"location-v2/location/location_manager"
+	"location-v2/utils"
 
 	"os"
-	"strings"
 
 	"github.com/spf13/cobra"
 )
-
-func FilterRestaurantsByName(restaurants []api.Restaurant, name string) []api.Restaurant {
-	var filteredRestaurants []api.Restaurant
-	name = strings.ToLower(name)
-
-	for _, restaurant := range restaurants {
-		if strings.Contains(strings.ToLower(restaurant.Name), name) {
-			filteredRestaurants = append(filteredRestaurants, restaurant)
-		}
-	}
-
-	return filteredRestaurants
-}
-
-func FilterRestaurantByFood(restaurants []api.Restaurant, food string) []api.Restaurant {
-	var filtered []api.Restaurant
-	food = strings.ToLower(food) // Normalize case for searching
-
-	for _, restaurant := range restaurants {
-		for _, dish := range restaurant.Dishes {
-			if strings.Contains(strings.ToLower(dish), food) {
-				filtered = append(filtered, restaurant)
-				break // No need to check further dishes for this restaurant
-			}
-		}
-	}
-
-	return filtered
-}
 
 func run(name string, food string) {
 	loc, err := location_manager.CurrentLocation()
@@ -60,11 +31,11 @@ func run(name string, food string) {
 	}
 
 	if name != "" {
-		restaurants = FilterRestaurantsByName(restaurants, name)
+		restaurants = utils.FilterRestaurantsByName(restaurants, name)
 	}
 
 	if food != "" {
-		restaurants = FilterRestaurantByFood(restaurants, food)
+		restaurants = utils.FilterRestaurantByFood(restaurants, food)
 	}
 
 	cli.PrintRestaurants(restaurants, food)
