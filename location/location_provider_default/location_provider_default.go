@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"location-v2/location/location_provider"
+
 	"net/http"
 	"strconv"
 	"strings"
@@ -48,9 +49,9 @@ func fetchLocationByIP() (float64, float64, error) {
 	return lat, lon, nil
 }
 
-type DefaultLocationManager struct{}
+type DefaultLocationProvider struct{}
 
-func (m DefaultLocationManager) GetLocation() (location_provider.Coordinate2D, error) {
+func (m DefaultLocationProvider) GetLocation() (location_provider.Coordinate2D, error) {
 	lat, lon, err := fetchLocationByIP()
 
 	if err != nil {
