@@ -1,32 +1,21 @@
 ### Running the application
 
-Build the objective c targets:
+Build the executable
 
-#### ARM
-
-Use the `./run.sh` script or:
-
-Create the object file & static library based on that
+#### ARM:
 
 ```bash
--> clang -c -arch arm64 -o location_manager_darwin.o location_manager_darwin.m
--> ar rcs liblocation.a location_manager_darwin.o
+./build.sh
 ```
 
-Build the go binary:
+Some version of MacOS require signing certificate for the location API popup to show:
+
+To create the certificate:
+
+1. Open keychain access
+2. Certificate assistant -> Create certificate
+3. Fill in the details, identity type should be self signed root, type codesigning
 
 ```bash
--> go build -gcflags "all=-N -l" -ldflags="-extldflags \"-sectcreate __TEXT __info_plist $(pwd)/Info.plist\" -linkmode=external" -o lounasta -v -x main.go
-```
-
-Sign the binary:
-
-```bash
--> codesign -s - lounasta
-```
-
-Voila! You can now run the app by executing the binary:
-
-```bash
--> ./lounasta
+./build.sh -c <Cert name>
 ```
