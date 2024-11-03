@@ -22,7 +22,7 @@
         manager.delegate = self;
         manager.desiredAccuracy = kCLLocationAccuracyBest;
 
-        CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
+        CLAuthorizationStatus status = manager.authorizationStatus;
         
         // Check authorization status and request if not determined
         if (status == kCLAuthorizationStatusNotDetermined) {
@@ -74,7 +74,7 @@
     CFRunLoopStop(CFRunLoopGetCurrent()); // Stop the run loop on error
 }
 
-- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+- (void)locationManager:(CLLocationManager *)locationManager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
     if (status == kCLAuthorizationStatusAuthorized || status == kCLAuthorizationStatusAuthorizedAlways) {
         [manager requestLocation];
         CFRunLoopStop(CFRunLoopGetCurrent());
