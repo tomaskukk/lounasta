@@ -10,15 +10,25 @@ LOCATION_PROVIDER_DARWIN_DIR="$SCRIPT_DIR/location/location_provider_darwin"
 INFO_PLIST="$LOCATION_PROVIDER_DARWIN_DIR/Info.plist"
 CERT_NAME=""
 VERBOSE=""
+INSTALL=""
 
-# Parse arguments
-while getopts "c:v" opt; do
+while getopts "c:vi:" opt; do
   case $opt in
     c)
+      echo "Certificate Name: $OPTARG"
       CERT_NAME=$OPTARG
       ;;
     v)
       VERBOSE="-v"
+      ;;
+    i)
+      if [[ "$OPTARG" == "darwin" || "$OPTARG" == "other" ]]; then
+        echo "Adding install flag. Binary will be installed to gopath."
+        INSTALL=$OPTARG
+      else
+        echo "Invalid value for -i. Use 'darwin' or 'other'."
+        exit 1
+      fi
       ;;
     \?)
       echo "Invalid option: -$OPTARG" >&2
@@ -27,8 +37,22 @@ while getopts "c:v" opt; do
   esac
 done
 
+sign_binary_for_darwin() {
+  local output_name=$1
+  echo "Signing binary $output_name for Darwin..."
+  if [ -n "$CERT_NAME" ]; then
+    codesign $VERBOSE -s "$CERT_NAME" "$output_name"
+  else
+    codesign $VERBOSE -s - "$output_name"
+  fi
+}
 
-clean_up_c_libraries() {
+build_c_artifacts() {
+  clang -c -arch $C_ARCH -o "$LOCATION_PROVIDER_DARWIN_DIR/location_provider_darwin.o" "$LOCATION_PROVIDER_DARWIN_DIR/location_provider_darwin.m"
+  ar rcs "$LOCATION_PROVIDER_DARWIN_DIR/liblocation.a" "$LOCATION_PROVIDER_DARWIN_DIR/location_provider_darwin.o"
+}
+
+clean_up_c_artifacts() {
   rm -rf $VERBOSE $SCRIPT_DIR/$APP_NAME $LOCATION_PROVIDER_DARWIN_DIR/location_provider_darwin.o $LOCATION_PROVIDER_DARWIN_DIR/liblocation.a
 }
 
@@ -46,7 +70,7 @@ do
 	platform_split=(${platform//\// })
 	GOOS=${platform_split[0]}
 	GOARCH=${platform_split[1]}
-	OUTPUT_NAME='build/'$APP_NAME'-'$GOOS'-'$GOARCH
+	OUTPUT_NAME=$SCRIPT_DIR'/build/'$APP_NAME'-'$GOOS'-'$GOARCH
   CGO_LDFLAGS=''
 	if [ $GOOS = "windows" ]; then
 		OUTPUT_NAME+='.exe'
@@ -60,8 +84,7 @@ do
       C_ARCH="x86_64"
     fi
 
-    clang -c -arch $C_ARCH -o "$LOCATION_PROVIDER_DARWIN_DIR/location_provider_darwin.o" "$LOCATION_PROVIDER_DARWIN_DIR/location_provider_darwin.m"
-    ar rcs "$LOCATION_PROVIDER_DARWIN_DIR/liblocation.a" "$LOCATION_PROVIDER_DARWIN_DIR/location_provider_darwin.o"
+    build_c_artifacts
 
     CGO_ENABLED=1
     LDFLAGS="-extldflags \"-L$LOCATION_PROVIDER_DARWIN_DIR -sectcreate __TEXT __info_plist $INFO_PLIST\" -linkmode=external"
@@ -70,18 +93,14 @@ do
     CGO_ENABLED=0
   fi
 
-  echo $LDFLAGS
+  echo "Building for $GOOS/$GOARCH..."
 
-  env CGO_ENABLED=$CGO_ENABLED GOOS=$GOOS GOARCH=$GOARCH go build -gcflags "all=-N -l" -ldflags="$LDFLAGS" -o "$OUTPUT_NAME" $VERBOSE -x "$PACKAGE_NAME"  
+  env CGO_ENABLED=$CGO_ENABLED GOOS=$GOOS GOARCH=$GOARCH go build -gcflags "all=-N -l" -ldflags="$LDFLAGS" -o "$OUTPUT_NAME" $VERBOSE "$PACKAGE_NAME"
 
-  clean_up_c_libraries
+  clean_up_c_artifacts
 
   if [ $GOOS = "darwin" ]; then
-    if [ -n "$CERT_NAME" ]; then
-      codesign $VERBOSE -s "$CERT_NAME" "./$OUTPUT_NAME"
-    else
-      codesign $VERBOSE -s - "./$OUTPUT_NAME"
-    fi
+    sign_binary_for_darwin $OUTPUT_NAME
   fi
 
 	if [ $? -ne 0 ]; then
@@ -91,3 +110,21 @@ do
 done
 
 echo "Build process completed."
+
+
+if [ -n "$INSTALL" ]; then
+  echo "Installing the binary locally..."
+  if [ "$INSTALL" = "darwin" ]; then
+    build_c_artifacts
+    LDFLAGS="-extldflags \"-L$LOCATION_PROVIDER_DARWIN_DIR -sectcreate __TEXT __info_plist $INFO_PLIST\" -linkmode=external"
+  else
+    LDFLAGS=""
+  fi
+
+  go install -gcflags "all=-N -l" -ldflags="$LDFLAGS" $VERBOSE "$PACKAGE_NAME"
+
+  if [ $INSTALL = "darwin" ]; then
+    sign_binary_for_darwin "$(which $APP_NAME)"
+    clean_up_c_artifacts
+  fi
+fi
