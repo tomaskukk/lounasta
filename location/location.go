@@ -1,7 +1,7 @@
 package location
 
 import (
-	"location-v2/location/location_provider"
+	"github.com/tomaskukk/lounasta/location/location_provider"
 )
 
 func GetLocation() (location_provider.Coordinate2D, error) {

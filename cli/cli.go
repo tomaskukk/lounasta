@@ -2,9 +2,10 @@ package cli
 
 import (
 	"fmt"
-	"location-v2/api"
 	"strings"
 	"time"
+
+	"github.com/tomaskukk/lounasta/api"
 
 	"golang.org/x/exp/rand"
 )

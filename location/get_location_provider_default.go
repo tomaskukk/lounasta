@@ -4,8 +4,8 @@
 package location
 
 import (
-	"location-v2/location/location_provider"
-	"location-v2/location/location_provider_default"
+	"github.com/tomaskukk/lounasta/location/location_provider"
+	"github.com/tomaskukk/lounasta/location/location_provider_default"
 )
 
 func getProvider() location_provider.LocationProvider {

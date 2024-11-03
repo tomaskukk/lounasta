@@ -1,4 +1,4 @@
-module location-v2
+module github.com/tomaskukk/lounasta
 
 go 1.23
 

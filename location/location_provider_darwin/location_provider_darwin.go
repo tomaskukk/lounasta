@@ -3,8 +3,9 @@ package location_provider_darwin
 import (
 	"fmt"
 
-	"location-v2/location/location_provider"
 	"time"
+
+	"github.com/tomaskukk/lounasta/location/location_provider"
 )
 
 /*

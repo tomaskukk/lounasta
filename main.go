@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
-	"location-v2/api"
-	"location-v2/cli"
-	"location-v2/location"
 
-	"location-v2/utils"
+	"github.com/tomaskukk/lounasta/api"
+	"github.com/tomaskukk/lounasta/cli"
+	"github.com/tomaskukk/lounasta/location"
+
+	"github.com/tomaskukk/lounasta/utils"
 
 	"os"
 

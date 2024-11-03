@@ -4,7 +4,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"location-v2/location/location_provider"
+
+	"github.com/tomaskukk/lounasta/location/location_provider"
 
 	"net/http"
 	"strconv"

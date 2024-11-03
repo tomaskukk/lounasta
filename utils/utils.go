@@ -1,8 +1,9 @@
 package utils
 
 import (
-	"location-v2/api"
 	"strings"
+
+	"github.com/tomaskukk/lounasta/api"
 )
 
 func FilterRestaurantsByName(restaurants []api.Restaurant, name string) []api.Restaurant {
