@@ -22,8 +22,10 @@ The **Lounasta** app provides two parameters for filtering lunch menu searches t
 
 ## Installation
 
+Replace version tag with version you want. For 0.0.1 it would be:
+
 ```bash
-curl -fsSL https://raw.githubusercontent.com/tomaskukk/lounasta/master/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/tomaskukk/lounasta/0.0.1/install.sh | bash
 ```
 
 **Note**

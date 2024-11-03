@@ -1,7 +1,7 @@
 #!/bin/bash
 
 REPO="tomaskukk/lounasta"
-VERSION="v1.0.0"  # Replace with the latest release version
+VERSION="0.0.1"  # Replace with the latest release version
 
 # Detect the platform
 case "$(uname -s)" in
