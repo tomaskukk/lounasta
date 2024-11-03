@@ -22,7 +22,9 @@ The **Lounasta** app provides two parameters for filtering lunch menu searches t
 
 ## Installation
 
+```bash
 curl -fsSL https://raw.githubusercontent.com/tomaskukk/lounasta/master/install.sh | bash
+```
 
 If you use darwin, you'll need to sign the binary first.
 
