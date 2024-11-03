@@ -39,7 +39,7 @@ Identity type: self signed root.
 Certificate type: codesigning.
 
 ```bash
-  codesign -s "<certificateName>" "$(which lounasta)"
+  sudo codesign -s "<certificateName>" "$(which lounasta)"
 ```
 
 ## Build Instructions
