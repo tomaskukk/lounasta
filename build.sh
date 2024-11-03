@@ -63,7 +63,7 @@ clean_up_build_dir() {
 clean_up_build_dir
 
 
-platforms=("windows/amd64" "darwin/amd64" "darwin/arm64" "linux/amd64" "linux/arm64")
+platforms=("darwin/amd64" "darwin/arm64" "linux/amd64" "linux/arm64")
 
 for platform in "${platforms[@]}"
 do

@@ -18,7 +18,24 @@ The **Lounasta** app provides two parameters for filtering lunch menu searches t
 - Fetches and displays lunch menus from nearby restaurants.
 - Supports native location detection on macOS for accurate geolocation.
 - Fallback to IP-based location for non-macOS platforms.
-- Cross-platform compatibility (Windows, macOS, and Linux).
+- Cross-platform compatibility (macOS, and Linux).
+
+## Installation
+
+curl -fsSL https://raw.githubusercontent.com/tomaskukk/lounasta/master/install.sh | bash
+
+If you use darwin, you'll need to sign the binary first.
+
+This can be done the following way:
+
+Create a signing certificate locally. Instructions can be found [here](https://support.apple.com/guide/keychain-access/create-self-signed-certificates-kyca8916/mac)
+
+Identity type: self signed root.
+Certificate type: codesigning.
+
+```bash
+  codesign -s "<certificateName>" "$(which lounasta)"
+```
 
 ## Build Instructions
 
@@ -43,7 +60,7 @@ Run the script with optional flags:
 
 ### Build Process Steps
 
-1. **Set Platform Variables:** Compiles for `windows/amd64`, `darwin/amd64`, `darwin/arm64`, `linux/amd64`, and `linux/arm64`.
+1. **Set Platform Variables:** Compiles for `darwin/amd64`, `darwin/arm64`, `linux/amd64`, and `linux/arm64`.
 2. **Build macOS Artifacts:** If targeting macOS, the script compiles the Objective-C files needed for the native location API.
 3. **Clean-Up:** Removes intermediate build artifacts.
 4. **Signing (macOS only):** If a certificate is provided, the binary will be signed for macOS.
