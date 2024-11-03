@@ -3,29 +3,31 @@
 REPO="tomaskukk/lounasta"
 VERSION="0.0.1"  # Replace with the latest release version
 
-# Detect the platform
-case "$(uname -s)" in
-    Linux*)     OS="linux";;
-    Darwin*)    OS="darwin";;
-    CYGWIN*|MINGW*|MSYS_NT*) OS="windows";;
-    *)          echo "Unsupported OS"; exit 1;;
-esac
+OS=$(uname -s | tr '[:upper:]' '[:lower:]')
+ARCH=$(uname -m)
 
-ARCH="$(uname -m)"
 case "$ARCH" in
     x86_64) ARCH="amd64";;
     arm64) ARCH="arm64";;
-    *) echo "Unsupported architecture"; exit 1;;
+    *) echo "Unsupported architecture: $ARCH"; exit 1;;
 esac
 
-# Download the binary
+
 FILE="lounasta-$OS-$ARCH"
 URL="https://github.com/$REPO/releases/download/$VERSION/$FILE.zip"
+
+# Download and install
+echo "Downloading $FILE from $URL..."
 curl -L -o "$FILE.zip" "$URL" || { echo "Download failed"; exit 1; }
 
-# Extract and install
-unzip "$FILE.zip"
+echo "Extracting $FILE.zip..."
+unzip -o "$FILE.zip" || { echo "Extraction failed"; exit 1; }
 chmod +x "$FILE"
-mv "$FILE" /usr/local/bin/lounasta || { echo "Permission denied"; exit 1; }
 
-echo "Lounasta installed successfully! Run it with 'lounasta'."
+echo "Installing $FILE to /usr/local/bin..."
+sudo mv "$FILE" /usr/local/bin/lounasta || { echo "Installation failed"; exit 1; }
+
+echo "Cleaning up..."
+rm "$FILE.zip"
+
+echo "Lounasta installed successfully! You can now run it with 'lounasta'."
